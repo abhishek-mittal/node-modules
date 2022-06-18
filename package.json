@@ -1,0 +1,10 @@
+{
+  "name": "node-modules",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/abhishek-mittal/node-modules.git",
+  "license": "MIT",
+  "dependencies": {
+    "konsta": "^0.10.4"
+  }
+}
