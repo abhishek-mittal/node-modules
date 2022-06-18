@@ -5,7 +5,6 @@
   "jsnext:main": "./esm/konsta-react.js",
   "module": "./esm/konsta-react.js",
   "types": "./konsta-react.d.ts",
-  "type": "module",
   "exports": {
     ".": {
       "import": "./esm/konsta-react.js",
