@@ -1,0 +1,85 @@
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+import React, { useRef, forwardRef, useImperativeHandle } from 'react';
+import { cls } from '../../../shared/esm/cls.js';
+import { useTheme } from '../shared/use-theme.js';
+import { useTouchRipple } from '../shared/use-touch-ripple.js';
+import { useThemeClasses } from '../shared/use-theme-classes.js';
+import { useDarkClasses } from '../shared/use-dark-classes.js';
+import { ButtonClasses } from '../../../shared/esm/classes/ButtonClasses.js';
+const Button = /*#__PURE__*/forwardRef((props, ref) => {
+  const {
+    component = 'button',
+    className,
+    colors: colorsProp,
+    ios,
+    material,
+    disabled,
+    // Anchor props
+    href,
+    // Style props
+    outline,
+    clear,
+    rounded,
+    small,
+    large,
+    raised,
+    inline,
+    // Segmented
+    segmented,
+    segmentedStrong,
+    segmentedActive,
+    touchRipple = true,
+    // Children
+    children,
+    // Rest
+    ...rest
+  } = props;
+  const rippleElRef = useRef(null);
+  useImperativeHandle(ref, () => ({
+    el: rippleElRef.current
+  }));
+  let Component = component;
+  if (typeof props.component === 'undefined' && (href || href === '')) Component = 'a';
+  const attrs = {
+    href,
+    ...rest
+  };
+  const theme = useTheme({
+    ios,
+    material
+  });
+  const themeClasses = useThemeClasses({
+    ios,
+    material
+  });
+  const dark = useDarkClasses();
+  useTouchRipple(rippleElRef, theme === 'material' && touchRipple);
+  const size = large ? 'large' : small ? 'small' : 'medium';
+  let style = outline ? 'outline' : clear || segmented && !segmentedActive ? 'clear' : 'fill';
+  if (segmentedStrong) style = 'segmentedStrong';
+  if (segmentedStrong && segmentedActive) style = 'segmentedStrongActive';
+  const colors = {
+    text: 'text-primary',
+    border: 'border-primary',
+    bg: 'bg-primary',
+    activeBg: 'active:bg-primary',
+    activeBgDark: 'active:bg-primary-dark',
+    touchRipple: 'touch-ripple-primary',
+    disabledText: cls('text-black text-opacity-30', dark('dark:text-white dark:text-opacity-30')),
+    disabledBg: cls('bg-black bg-opacity-10', dark('dark:bg-white dark:bg-opacity-10')),
+    disabledBorder: cls('border-black border-opacity-10', dark('dark:border-white dark:border-opacity-10')),
+    ...colorsProp
+  };
+  const c = themeClasses(ButtonClasses(props, colors, className, dark));
+  const classes = cls(c.base[rounded ? 'rounded' : 'square'], // style
+  c.style[style], // size
+  c.size[size], raised && c.raised, className);
+  return /*#__PURE__*/React.createElement(Component, _extends({
+    ref: rippleElRef,
+    className: classes,
+    disabled: disabled
+  }, attrs), children);
+});
+Button.displayName = 'Button';
+export default Button;
